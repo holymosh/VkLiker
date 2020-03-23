@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace VkLiker
 {
@@ -6,7 +7,9 @@ namespace VkLiker
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var serviceProvider = new ServiceCollection();
+            
+            serviceProvider.BuildServiceProvider();
         }
     }
 }

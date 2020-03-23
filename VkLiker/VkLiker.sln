@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkLiker", "VkLiker\VkLiker.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Database", "Database\Database.csproj", "{84FFC775-7B8A-4E53-A7DD-9C32605E84F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VkInteraction", "VkInteraction\VkInteraction.csproj", "{911AC48A-49F9-4F0B-99FA-04A52CF7CBA4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{01C0F997-3FC3-4CB8-AFDA-055474AF22F8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{84FFC775-7B8A-4E53-A7DD-9C32605E84F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84FFC775-7B8A-4E53-A7DD-9C32605E84F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84FFC775-7B8A-4E53-A7DD-9C32605E84F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{911AC48A-49F9-4F0B-99FA-04A52CF7CBA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{911AC48A-49F9-4F0B-99FA-04A52CF7CBA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{911AC48A-49F9-4F0B-99FA-04A52CF7CBA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{911AC48A-49F9-4F0B-99FA-04A52CF7CBA4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01C0F997-3FC3-4CB8-AFDA-055474AF22F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01C0F997-3FC3-4CB8-AFDA-055474AF22F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01C0F997-3FC3-4CB8-AFDA-055474AF22F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01C0F997-3FC3-4CB8-AFDA-055474AF22F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

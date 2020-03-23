@@ -9,7 +9,7 @@ namespace VkLiker
         {
             var serviceProvider = new ServiceCollection();
             
-            serviceProvider.BuildServiceProvider();
+            var provider = serviceProvider.BuildServiceProvider();
         }
     }
 }

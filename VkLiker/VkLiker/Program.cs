@@ -8,7 +8,6 @@ namespace VkLiker
         static void Main(string[] args)
         {
             var serviceProvider = new ServiceCollection();
-            
             var provider = serviceProvider.BuildServiceProvider();
         }
     }

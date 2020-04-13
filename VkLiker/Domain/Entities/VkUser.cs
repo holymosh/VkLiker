@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Database;
 
 namespace Domain.Entities
 {
@@ -15,7 +14,7 @@ namespace Domain.Entities
         public DateTime LikeDate { get; set; }
 
         public long CityId { get; set; }
-        public City City { get; set; }
+        public VkCity VkCity { get; set; }
 
     }
 }

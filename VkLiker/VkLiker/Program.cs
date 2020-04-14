@@ -1,4 +1,5 @@
 ﻿using System;
+using Database;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace VkLiker
@@ -7,8 +8,10 @@ namespace VkLiker
     {
         static void Main(string[] args)
         {
-            var serviceProvider = new ServiceCollection();
-            var provider = serviceProvider.BuildServiceProvider();
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.RegisterDb();
+            var provider = serviceCollection.BuildServiceProvider();
+            Console.ReadKey();
         }
     }
 }

@@ -45,5 +45,10 @@ namespace VkInteraction.Services.Concrete
                 Query = query
             });
         }
+
+        public VkCollection<Region> GetRegions(string region)
+        {
+            return _vkApi.Database.GetRegions(1, region);
+        }
     }
 }

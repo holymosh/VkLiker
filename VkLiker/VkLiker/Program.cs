@@ -5,6 +5,8 @@ using Domain;
 using Microsoft.Extensions.DependencyInjection;
 using VkInteraction;
 using VkInteraction.Services.Abstract;
+using VkLiker.Service.Abstract;
+using VkLiker.Service.Concrete;
 
 namespace VkLiker
 {
@@ -16,30 +18,21 @@ namespace VkLiker
             serviceCollection.RegisterDb();
             serviceCollection.RegisterVkInteraction();
             serviceCollection.RegisterDomain();
+            serviceCollection.RegisterMainModule();
             var provider = serviceCollection.BuildServiceProvider();
-            InitDb(provider);
+            var startupService = provider.GetService<IStartupService>();
+            startupService.InitDb();
             Console.ReadKey();
         }
 
-        static void InitDb(ServiceProvider provider)
+
+    }
+
+    static class DiRegister
+    {
+        public static void RegisterMainModule(this ServiceCollection serviceCollection)
         {
-            var dbcontext = provider.GetService<VkContext>();
-            var test = dbcontext.VkCities.FirstOrDefault();
-            var vkSerivce = provider.GetService<IVkService>();
-            var cities = new[] {"Тамбов"};
-            foreach (var city in cities)
-            {
-                Console.WriteLine($"{city} : ");
-                var result = vkSerivce.GetCitiesByString(city);
-                foreach (var cityResult in result)
-                {
-                    Console.Write($"{cityResult.Title}:{cityResult.Region}, ");
-                }
-                Console.WriteLine();
-            }
-
-            Console.ReadKey();
-
+            serviceCollection.AddSingleton<IStartupService, StartupService>();
         }
     }
 }

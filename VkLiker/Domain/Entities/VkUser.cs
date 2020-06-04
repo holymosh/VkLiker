@@ -13,7 +13,7 @@ namespace Domain.Entities
         public bool IsLiked { get; set; }
         public DateTime LikeDate { get; set; }
 
-        public long CityId { get; set; }
+        public long VkCityId { get; set; }
         public VkCity VkCity { get; set; }
 
     }

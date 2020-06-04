@@ -7,6 +7,6 @@ namespace Domain.Entities
     public class VkLike : BaseEntity
     {
         public long CurrentUserId { get; set; }
-        public VkUser CurrentUser { get; set; }
+        public User CurrentUser { get; set; }
     }
 }

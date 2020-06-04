@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class VkUser : BaseEntity
+    public class User : BaseEntity
     {
 		public long VkId { get; set; }
         public string FirstName { get; set; }
@@ -14,7 +14,7 @@ namespace Domain.Entities
         public DateTime LikeDate { get; set; }
 
         public long VkCityId { get; set; }
-        public VkCity VkCity { get; set; }
+        public City City { get; set; }
 
     }
 }

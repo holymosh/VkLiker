@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Database\Database.csproj" />
+    <ProjectReference Include="..\VkInteraction\VkInteraction.csproj" />
   </ItemGroup>
 
 </Project>

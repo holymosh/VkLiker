@@ -24,6 +24,20 @@ namespace VkLiker
             var dbcontext = provider.GetService<VkContext>();
             var test = dbcontext.VkCities.FirstOrDefault();
             var vkSerivce = provider.GetService<IVkService>();
+            var cities = new[] {"Тамбов", "Пенза","Воронеж"};
+            foreach (var city in cities)
+            {
+                Console.WriteLine($"{city} : ");
+                var result = vkSerivce.GetCitiesByString(city);
+                foreach (var cityResult in result)
+                {
+                    Console.Write($"{cityResult.Title}:{cityResult.Region}, ");
+                }
+                Console.WriteLine();
+            }
+
+            Console.ReadKey();
+
         }
     }
 }

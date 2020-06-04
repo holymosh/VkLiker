@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using VkNet.Model;
+using VkNet.Utils;
 
 namespace VkInteraction.Services.Abstract
 {
     public interface IVkService
     {
+        VkCollection<City> GetCitiesByString(string query);
     }
 }

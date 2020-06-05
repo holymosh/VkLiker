@@ -24,30 +24,39 @@ namespace VkLiker.Service.Concrete
 
         public async Task InitDb()
         {
-            var tmb = _vkService.GetRegions("Тамбов").FirstOrDefault();
-            if (tmb != null)
+            var isInitialized = _dbContext.InitOptions.FirstOrDefault();
+            if (isInitialized == null)
             {
-                _dbContext.Set<Region>().Add(new Region()
+                var tmb = _vkService.GetRegions("Тамбов").FirstOrDefault();
+                if (tmb != null)
+                {
+                    _dbContext.Set<Region>().Add(new Region()
                     {
                         Title = tmb.Title,
                         SourceId = tmb.Id
                     });
-                await _dbContext.SaveChangesAsync();
-            }
-
-            var cities = new[] { "Тамбов" };
-            foreach (var city in cities)
-            {
-                Console.WriteLine($"{city} : ");
-                var result = _vkService.GetCitiesByString(city);
-                foreach (var cityResult in result)
-                {
-                    Console.Write($"{cityResult.Title}:{cityResult.Region}, ");
+                    isInitialized = new ApplicationInitOptions()
+                    {
+                        IsCitiesSynchronized = true
+                    };
+                    _dbContext.InitOptions.Add(isInitialized);
+                    await _dbContext.SaveChangesAsync();
                 }
-                Console.WriteLine();
-            }
 
-            Console.ReadKey();
+                //var cities = new[] { "Тамбов" };
+                //foreach (var city in cities)
+                //{
+                //    Console.WriteLine($"{city} : ");
+                //    var result = _vkService.GetCitiesByString(city);
+                //    foreach (var cityResult in result)
+                //    {
+                //        Console.Write($"{cityResult.Title}:{cityResult.Region}, ");
+                //    }
+                //    Console.WriteLine();
+                //}
+
+                //Console.ReadKey();
+            }
         }
     }
 }

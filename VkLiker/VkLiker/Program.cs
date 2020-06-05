@@ -25,8 +25,6 @@ namespace VkLiker
             await startupService.InitDb();
             Console.ReadKey();
         }
-
-
     }
 
     static class DiRegister

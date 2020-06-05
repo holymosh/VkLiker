@@ -8,5 +8,6 @@ namespace Domain.Entities
     {
         public long CurrentUserId { get; set; }
         public User CurrentUser { get; set; }
+        public DateTime Date { get; set; }
     }
 }

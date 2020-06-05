@@ -5,10 +5,15 @@ namespace Domain.Entities
 {
     public abstract class BaseEntity
     {
-        [ForeignKey("Id")]
+        [Key]
         public long Id { get; set; }
 
         [Timestamp]
         public byte[] RowVersion { get; set; }
+    }
+
+    public abstract class ExternalEntity : BaseEntity
+    {
+        public long SourceId { get; set; }
     }
 }

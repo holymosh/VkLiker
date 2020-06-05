@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class User : BaseEntity
+    public class User : ExternalEntity
     {
 		public long VkId { get; set; }
         public string FirstName { get; set; }

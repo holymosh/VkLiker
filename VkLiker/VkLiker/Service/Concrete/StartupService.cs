@@ -49,7 +49,9 @@ namespace VkLiker.Service.Concrete
                 {
                     foreach (var part in regionParts)
                     {
-                        var parts = _vkService.GetRegionPartsByString(part).Where(c => c.Region == tmbRegion.Title && c.Id.HasValue).DistinctBy(c => c.Title)
+                        var parts = _vkService.GetRegionPartsByString(part)
+                            .Where(c => c.Region == tmbRegion.Title && c.Id.HasValue)
+                            .DistinctBy(c => c.Title)
                             .Select(c => new RegionPart
                             {
                                 Title = c.Title,

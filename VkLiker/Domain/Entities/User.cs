@@ -15,6 +15,10 @@ namespace Domain.Entities
 
         public long VkCityId { get; set; }
         public RegionPart RegionPart { get; set; }
+        public long? PreviousId { get; set; }
+        public User Previous { get; set; }
+
+        public ICollection<User> Friends { get; set; }
 
     }
 }

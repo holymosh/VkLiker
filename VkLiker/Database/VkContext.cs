@@ -22,7 +22,9 @@ namespace Database
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<RegionPart>().HasOne(c => c.VkRegion);
-            modelBuilder.Entity<User>().HasOne(u => u.RegionPart);
+            var userBuilder = modelBuilder.Entity<User>();
+            userBuilder.HasOne(u => u.RegionPart);
+            userBuilder.HasMany(u => u.Friends).WithOne(u => u.Previous);
             var likeBuilder = modelBuilder.Entity<VkLike>();
             likeBuilder.HasOne(l => l.CurrentUser);
             var regionBuilder = modelBuilder.Entity<VkRegion>();

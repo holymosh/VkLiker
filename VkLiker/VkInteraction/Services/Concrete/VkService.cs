@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using VkInteraction.Services.Abstract;
 using VkNet.Abstractions;
 using VkNet.Enums.Filters;
 using VkNet.Model;
+using VkNet.Model.RequestParams;
 using VkNet.Model.RequestParams.Database;
 using VkNet.Utils;
 
@@ -49,6 +48,14 @@ namespace VkInteraction.Services.Concrete
         public VkCollection<Region> GetRegions(string region)
         {
             return _vkApi.Database.GetRegions(1, region);
+        }
+
+        public void FindUser()
+        {
+            var user = _vkApi.Users.Search(new UserSearchParams()
+            {
+
+            })
         }
     }
 }

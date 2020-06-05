@@ -34,6 +34,7 @@ namespace VkLiker
         public static void RegisterMainModule(this ServiceCollection serviceCollection)
         {
             serviceCollection.AddSingleton<IStartupService, StartupService>();
+            serviceCollection.AddSingleton<ILikeService, LikeService>();
         }
     }
 }

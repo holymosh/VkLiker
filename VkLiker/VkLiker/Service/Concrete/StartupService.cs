@@ -1,9 +1,11 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Common;
 using Database;
 using Domain.Entities;
 using VkInteraction.Services.Abstract;
 using VkLiker.Service.Abstract;
+
 
 namespace VkLiker.Service.Concrete
 {
@@ -47,7 +49,7 @@ namespace VkLiker.Service.Concrete
                 {
                     foreach (var part in regionParts)
                     {
-                        var parts = _vkService.GetRegionPartsByString(part).Where(c => c.Region == tmbRegion.Title && c.Id.HasValue).GroupBy(c => c.Title).Select(g => g.FirstOrDefault())
+                        var parts = _vkService.GetRegionPartsByString(part).Where(c => c.Region == tmbRegion.Title && c.Id.HasValue).DistinctBy(c => c.Title)
                             .Select(c => new RegionPart
                             {
                                 Title = c.Title,

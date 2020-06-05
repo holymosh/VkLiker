@@ -22,7 +22,7 @@ namespace VkLiker.Service.Concrete
             var tambov = _dbContext.RegionParts.SingleOrDefault(p => p.Title == "Тамбов");
             if (tambov != null)
             {
-                await _vkService.GetUsersFromGlobalSearch((int?) tambov.SourceId);
+                var usersFromGlobalSearch = await _vkService.GetUsersFromGlobalSearch((int?) tambov.SourceId);
             }
         }
     }

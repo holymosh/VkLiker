@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VkInteraction.Services.Abstract;
 using VkNet.Abstractions;
@@ -51,14 +53,15 @@ namespace VkInteraction.Services.Concrete
             return _vkApi.Database.GetRegions(1, region);
         }
 
-        public async Task<VkCollection<User>> GetUsersFromGlobalSearch(int? cityId)
+        public async Task<IEnumerable<User>> GetUsersFromGlobalSearch(int? cityId)
         {
-            return  await _vkApi.Users.SearchAsync(new UserSearchParams
+            var users =   await _vkApi.Users.SearchAsync(new UserSearchParams
             {
                 AgeFrom = 18,
                 City = cityId,
                 Country = 1,
             });
+            return users.Where(u => !u.IsClosed.HasValue);
         }
     }
 }

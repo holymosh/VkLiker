@@ -14,7 +14,7 @@ namespace Domain.Entities
         public DateTime LikeDate { get; set; }
 
         public long VkCityId { get; set; }
-        public City City { get; set; }
+        public RegionPart RegionPart { get; set; }
 
     }
 }

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Database;
 using Domain.Entities;
 using VkInteraction.Services.Abstract;
 using VkLiker.Service.Abstract;
-using VkNet.Abstractions;
 
 namespace VkLiker.Service.Concrete
 {
@@ -24,17 +20,20 @@ namespace VkLiker.Service.Concrete
 
         public async Task InitDb()
         {
+            await _dbContext.Database.EnsureDeletedAsync();
+            await _dbContext.Database.EnsureCreatedAsync();
             var isInitialized = _dbContext.InitOptions.FirstOrDefault();
+            VkRegion dbRegion = null;
             if (isInitialized == null)
             {
-                var tmb = _vkService.GetRegions("Тамбов").FirstOrDefault();
-                if (tmb != null)
+                var tmbRegion = _vkService.GetRegions("Тамбов").FirstOrDefault();
+                if (tmbRegion != null)
                 {
-                    _dbContext.Set<Region>().Add(new Region()
+                    dbRegion = _dbContext.Set<VkRegion>().Add(new VkRegion()
                     {
-                        Title = tmb.Title,
-                        SourceId = tmb.Id
-                    });
+                        Title = tmbRegion.Title,
+                        SourceId = tmbRegion.Id
+                    }).Entity;
                     isInitialized = new ApplicationInitOptions()
                     {
                         IsCitiesSynchronized = true
@@ -43,19 +42,24 @@ namespace VkLiker.Service.Concrete
                     await _dbContext.SaveChangesAsync();
                 }
 
-                //var cities = new[] { "Тамбов" };
-                //foreach (var city in cities)
-                //{
-                //    Console.WriteLine($"{city} : ");
-                //    var result = _vkService.GetCitiesByString(city);
-                //    foreach (var cityResult in result)
-                //    {
-                //        Console.Write($"{cityResult.Title}:{cityResult.Region}, ");
-                //    }
-                //    Console.WriteLine();
-                //}
-
-                //Console.ReadKey();
+                var regionParts = TambovCities.ResourceManager.GetString("tambov").Split(',').ToArray(); 
+                if (tmbRegion != null)
+                {
+                    foreach (var part in regionParts)
+                    {
+                        var parts = _vkService.GetRegionPartsByString(part).Where(c => c.Region == tmbRegion.Title && c.Id.HasValue).GroupBy(c => c.Title).Select(g => g.FirstOrDefault())
+                            .Select(c => new RegionPart
+                            {
+                                Title = c.Title,
+                                SourceId = c.Id.Value,
+                                RegionId = dbRegion.Id,
+                                VkRegion = dbRegion,
+                            }).ToArray();
+                        _dbContext.AddRange(parts);
+                        await _dbContext.SaveChangesAsync();
+                    }
+                }
+                    
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Database;
 using Domain;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VkInteraction;
 using VkInteraction.Services.Abstract;
@@ -15,6 +16,7 @@ namespace VkLiker
     {
         static async Task Main(string[] args)
         {
+            
             var serviceCollection = new ServiceCollection();
             serviceCollection.RegisterDb();
             serviceCollection.RegisterVkInteraction();

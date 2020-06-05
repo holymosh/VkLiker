@@ -1,10 +1,10 @@
 ﻿
 namespace Domain.Entities
 {
-    public class City : ExternalEntity
+    public class RegionPart : ExternalEntity
     {
         public string Title { get; set; }
         public long RegionId { get; set; }
-        public Region Region { get; set; }
+        public VkRegion VkRegion { get; set; }
     }
 }

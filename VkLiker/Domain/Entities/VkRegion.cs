@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    public class Region : ExternalEntity
+    public class VkRegion : ExternalEntity
     {
         public string Title { get; set; }
     }

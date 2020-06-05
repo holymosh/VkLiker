@@ -32,7 +32,7 @@ namespace VkInteraction.Services.Concrete
             _vkApi.Authorize(authParams);
         }
 
-        public VkCollection<City> GetCitiesByString(string query)
+        public VkCollection<City> GetRegionPartsByString(string query)
         {
             if (string.IsNullOrEmpty(query))
             {

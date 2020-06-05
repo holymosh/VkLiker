@@ -61,7 +61,7 @@ namespace VkInteraction.Services.Concrete
                 City = cityId,
                 Country = 1,
             });
-            return users.Where(u => !u.IsClosed.HasValue);
+            return users.Where(u => u.IsClosed == false);
         }
     }
 }

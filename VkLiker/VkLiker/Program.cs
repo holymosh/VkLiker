@@ -3,10 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Database;
 using Domain;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using VkInteraction;
-using VkInteraction.Services.Abstract;
 using VkLiker.Service.Abstract;
 using VkLiker.Service.Concrete;
 
@@ -25,6 +23,7 @@ namespace VkLiker
             var provider = serviceCollection.BuildServiceProvider();
             var startupService = provider.GetService<IStartupService>();
             await startupService.InitDb();
+            await startupService.Start();
             Console.ReadKey();
         }
     }

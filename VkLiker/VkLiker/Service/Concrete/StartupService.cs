@@ -13,11 +13,13 @@ namespace VkLiker.Service.Concrete
     {
         private readonly VkContext _dbContext;
         private readonly IVkService _vkService;
+        private readonly ILikeService _likeService;
 
-        public StartupService(VkContext dbContext, IVkService vkService)
+        public StartupService(VkContext dbContext, IVkService vkService, ILikeService likeService)
         {
             _dbContext = dbContext;
             _vkService = vkService;
+            _likeService = likeService;
         }
 
         public async Task InitDb()
@@ -65,6 +67,11 @@ namespace VkLiker.Service.Concrete
                 }
                     
             }
+        }
+
+        public async Task Start()
+        {
+            await _likeService.Start();
         }
     }
 }

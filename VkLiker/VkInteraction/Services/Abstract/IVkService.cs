@@ -1,4 +1,5 @@
-﻿using VkNet.Model;
+﻿using System.Threading.Tasks;
+using VkNet.Model;
 using VkNet.Utils;
 
 namespace VkInteraction.Services.Abstract
@@ -7,5 +8,6 @@ namespace VkInteraction.Services.Abstract
     {
         VkCollection<City> GetRegionPartsByString(string query);
         VkCollection<Region> GetRegions(string region);
+        Task<VkCollection<User>> GetUsersFromGlobalSearch(int? cityId);
     }
 }

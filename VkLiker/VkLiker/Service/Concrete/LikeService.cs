@@ -1,4 +1,6 @@
-﻿using Database;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Database;
 using VkInteraction.Services.Abstract;
 using VkLiker.Service.Abstract;
 
@@ -15,8 +17,13 @@ namespace VkLiker.Service.Concrete
             _vkService = vkService;
         }
 
-        public void Start()
+        public async Task Start()
         {
+            var tambov = _dbContext.RegionParts.SingleOrDefault(p => p.Title == "Тамбов");
+            if (tambov != null)
+            {
+                await _vkService.GetUsersFromGlobalSearch((int?) tambov.SourceId);
+            }
         }
     }
 }

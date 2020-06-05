@@ -6,14 +6,14 @@ namespace Database
 {
     public sealed class VkContext : DbContext
     {
-        public DbSet<RegionPart> Cities { get; }
+        public DbSet<RegionPart> RegionParts { get; }
         public DbSet<ApplicationInitOptions> InitOptions { get; }
         public DbSet<VkRegion> Regions { get; }
 
         public VkContext(DbContextOptions options) : base(options)
         {
             Database.EnsureCreated();
-            Cities = Set<RegionPart>();
+            RegionParts = Set<RegionPart>();
             Regions = Set<VkRegion>();
             InitOptions = Set<ApplicationInitOptions>();
 

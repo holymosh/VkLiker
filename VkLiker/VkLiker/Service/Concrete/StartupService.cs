@@ -38,7 +38,7 @@ namespace VkLiker.Service.Concrete
                         Title = tmbRegion.Title,
                         SourceId = tmbRegion.Id
                     }).Entity;
-                    isInitialized = new ApplicationInitOptions()
+                    isInitialized = new ApplicationOptions()
                     {
                         IsCitiesSynchronized = true
                     };

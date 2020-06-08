@@ -9,7 +9,7 @@ namespace VkInteraction.Services.Abstract
     {
         VkCollection<City> GetRegionPartsByString(string query);
         VkCollection<Region> GetRegions(string region);
-        Task<IEnumerable<User>> GetUsersFromGlobalSearch(int? cityId);
+        Task<IEnumerable<User>> GetUsersFromGlobalSearch(int? cityId, uint? i);
         Task SetLike(long itemId, long ownerId);
         Task<User> GetUser(long id);
         Task<IReadOnlyCollection<User>> GetUsers(IEnumerable<long> ids);

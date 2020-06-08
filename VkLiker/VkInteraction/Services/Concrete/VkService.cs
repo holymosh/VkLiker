@@ -55,13 +55,14 @@ namespace VkInteraction.Services.Concrete
             return _vkApi.Database.GetRegions(1, region);
         }
 
-        public async Task<IEnumerable<User>> GetUsersFromGlobalSearch(int? cityId)
+        public async Task<IEnumerable<User>> GetUsersFromGlobalSearch(int? cityId, uint? offset)
         {
             var users =   await _vkApi.Users.SearchAsync(new UserSearchParams
             {
                 AgeFrom = 18,
                 City = cityId,
                 Country = 1,
+                Offset = offset
             });
             return users.Where(u => u.IsClosed == false);
         }
@@ -89,7 +90,8 @@ namespace VkInteraction.Services.Concrete
 
         private async Task<IReadOnlyCollection<User>> RequestUsers(IEnumerable<long> ids)
         {
-            return await _vkApi.Users.GetAsync(ids,ProfileFields.PhotoId);
+
+            return await _vkApi.Users.GetAsync(ids,ProfileFields.All);
         }
     }
 }

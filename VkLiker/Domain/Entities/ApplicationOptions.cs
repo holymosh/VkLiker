@@ -4,8 +4,9 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class ApplicationInitOptions : BaseEntity
+    public class ApplicationOptions : BaseEntity
     {
         public bool IsCitiesSynchronized { get; set; }
+        public uint Offset { get; set; }
     }
 }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using VkInteraction.Services.Abstract;
 using VkNet.Abstractions;
 using VkNet.Enums.Filters;
+using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.RequestParams;
 using VkNet.Model.RequestParams.Database;
@@ -62,6 +64,32 @@ namespace VkInteraction.Services.Concrete
                 Country = 1,
             });
             return users.Where(u => u.IsClosed == false);
+        }
+
+        public async Task SetLike(long itemId,long ownerId)
+        {
+            await _vkApi.Likes.AddAsync(new LikesAddParams()
+            {
+                ItemId = itemId,
+                OwnerId = ownerId,
+                Type = LikeObjectType.Photo
+            });
+        }
+
+        public async Task<User> GetUser(long id)
+        {
+            var collection = await RequestUsers(new[] {id});
+            return collection.FirstOrDefault();
+        }
+
+        public async Task<IReadOnlyCollection<User>> GetUsers(IEnumerable<long> ids)
+        {
+            return await RequestUsers(ids);
+        }
+
+        private async Task<IReadOnlyCollection<User>> RequestUsers(IEnumerable<long> ids)
+        {
+            return await _vkApi.Users.GetAsync(ids,ProfileFields.PhotoId);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Domain.Entities
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public bool IsLiked { get; set; }
-        public bool IsFriendsLiked { get; set; }
+        public bool IsFriendsUploaded { get; set; }
         public DateTime LikeDate { get; set; }
 
         public long VkCityId { get; set; }

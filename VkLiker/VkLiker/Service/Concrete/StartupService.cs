@@ -26,7 +26,7 @@ namespace VkLiker.Service.Concrete
         {
             await _dbContext.Database.EnsureDeletedAsync();
             await _dbContext.Database.EnsureCreatedAsync();
-            var isInitialized = _dbContext.InitOptions.FirstOrDefault();
+            var isInitialized = _dbContext.AppOptions.FirstOrDefault();
             VkRegion dbRegion = null;
             if (isInitialized == null)
             {
@@ -42,7 +42,7 @@ namespace VkLiker.Service.Concrete
                     {
                         IsCitiesSynchronized = true
                     };
-                    _dbContext.InitOptions.Add(isInitialized);
+                    _dbContext.AppOptions.Add(isInitialized);
                     await _dbContext.SaveChangesAsync();
                 }
 

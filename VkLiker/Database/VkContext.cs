@@ -7,7 +7,7 @@ namespace Database
     public sealed class VkContext : DbContext
     {
         public DbSet<RegionPart> RegionParts { get; }
-        public DbSet<ApplicationOptions> InitOptions { get; }
+        public DbSet<ApplicationOptions> AppOptions { get; }
         public DbSet<VkRegion> Regions { get; }
         public DbSet<User> Users { get; set; }
 
@@ -16,7 +16,7 @@ namespace Database
             Database.EnsureCreated();
             RegionParts = Set<RegionPart>();
             Regions = Set<VkRegion>();
-            InitOptions = Set<ApplicationOptions>();
+            AppOptions = Set<ApplicationOptions>();
             Users = Set<User>();
 
         }

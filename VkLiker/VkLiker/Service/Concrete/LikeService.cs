@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Database;
@@ -34,9 +35,11 @@ namespace VkLiker.Service.Concrete
 
         }
 
-        private async Task LikeGlobalSearchedUsers(RegionPart regionPart)
+        private async Task LikeFromGlobalSearch(RegionPart regionPart)
         {
-            var offset = _dbContext.InitOptions.FirstOrDefault().Offset;
+            var appOptions = _dbContext.AppOptions.FirstOrDefault();
+            if (appOptions == null) throw new DataException("app options are null");
+            var offset = appOptions.Offset;
             var globalSearchResult = await _vkService.GetUsersFromGlobalSearch((int?)regionPart.SourceId, offset);
             foreach (var currentUser in globalSearchResult)
             {
@@ -46,30 +49,19 @@ namespace VkLiker.Service.Concrete
                     if (dbUser == null)
                     {
                         await _vkService.SetLike(GetItemId(currentUser.PhotoId), currentUser.Id);
-                        var likedUser = new User()
+                        var likedUser = new User
                         {
                             FirstName = currentUser.FirstName,
                             LastName = currentUser.LastName,
-                            IsFriendsLiked = false,
                             LikeDate = DateTime.Now,
                             RegionPart = regionPart,
                             IsLiked = true,
-                            SourceId = currentUser.Id,
+                            IsFriendsUploaded = false,
+                            SourceId = currentUser.Id
                         };
-                        var vkFriends = await _vkService.GetUsers(currentUser.FriendLists);
-                        var mappedFriends = vkFriends.Where(u => u.City.Region == regionPart.VkRegion.Title).Select(u =>
-                            new User
-                            {
-                                FirstName = u.FirstName,
-                                LastName = u.LastName,
-                                IsFriendsLiked = false,
-                                RegionPart = regionPart,
-                                SourceId = u.Id,
-                            });
-                        foreach (var friend in mappedFriends) likedUser.Friends.Add(friend);
-                        await _dbContext.Users.AddRangeAsync(mappedFriends);
                         await _dbContext.Users.AddAsync(likedUser);
                         await _dbContext.SaveChangesAsync();
+
                     }
                 }
                 catch (Exception e)
@@ -77,6 +69,64 @@ namespace VkLiker.Service.Concrete
                     Console.WriteLine(e);
                     throw;
                 }
+            }
+
+            appOptions.Offset += (uint) globalSearchResult.Count();
+            _dbContext.AppOptions.Update(appOptions);
+            await _dbContext.SaveChangesAsync();
+        }
+
+        private async Task UploadFriends(RegionPart regionPart)
+        {
+            var currentUser = await _dbContext.Users.FirstOrDefaultAsync(u => !u.IsFriendsUploaded);
+            if (currentUser != null)
+            {
+                try
+                {
+                    var userInfo = await _vkService.GetUser(currentUser.SourceId);
+                    var friendIds = userInfo.FriendLists;
+                    var friends = await _vkService.GetUsers(friendIds);
+                    var newFriends = friends.Where(u => u.City.Region == regionPart.VkRegion.Title).Select(u =>
+                        new User
+                        {
+                            FirstName = u.FirstName,
+                            LastName = u.LastName,
+                            RegionPart = regionPart,
+                            SourceId = u.Id,
+                            IsFriendsUploaded = false,
+                            IsLiked = false
+                        });
+                    await _dbContext.AddRangeAsync(newFriends);
+                    foreach (var friend in newFriends) currentUser.Friends.Add(friend);
+                    _dbContext.Users.Update(currentUser);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    
+                }
+            }
+        }
+
+        private async Task LikePersonFromDb()
+        {
+            var currentUser = await _dbContext.Users.FirstOrDefaultAsync(u => !u.IsLiked);
+            if (currentUser != null)
+            {
+                try
+                {
+                    var userInfo = await _vkService.GetUser(currentUser.SourceId);
+                    await _vkService.SetLike(GetItemId(userInfo.PhotoId), currentUser.Id);
+                    currentUser.IsLiked = true;
+                    _dbContext.Users.Update(currentUser);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+
             }
         }
 

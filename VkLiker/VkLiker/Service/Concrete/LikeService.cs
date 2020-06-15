@@ -64,9 +64,10 @@ namespace VkLiker.Service.Concrete
                 try
                 {
                     var dbUser = await _dbContext.Users.SingleOrDefaultAsync(u => u.SourceId == currentUser.Id);
+                    var userInfo = await _vkService.GetUser(currentUser.Id);
                     if (dbUser == null)
                     {
-                        await _vkService.SetLike(GetItemId(currentUser.PhotoId), currentUser.Id);
+                        await _vkService.SetLike(GetItemId(userInfo.PhotoId), currentUser.Id);
                         var likedUser = new User
                         {
                             FirstName = currentUser.FirstName,

@@ -8,6 +8,6 @@ namespace VkLiker.Service.Abstract
     public interface IStartupService
     {
         Task InitDb();
-        Task Start();
+        void Start();
     }
 }

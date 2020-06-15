@@ -25,7 +25,7 @@ namespace VkLiker
             var provider = serviceCollection.BuildServiceProvider();
             var startupService = provider.GetService<IStartupService>();
             await startupService.InitDb();
-            await startupService.Start();
+            startupService.Start();
             Console.ReadKey();
         }
     }
@@ -39,7 +39,7 @@ namespace VkLiker
                 .WriteTo.File("logs\\myapp.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
             var logger = Log.Logger;
-            Log.Information("App initialization");
+            logger.Information("App initialization");
             serviceCollection.AddSingleton(logger); // ILogger
             serviceCollection.AddSingleton<IStartupService, StartupService>();
             serviceCollection.AddSingleton<ILikeService, LikeService>();

@@ -7,6 +7,6 @@ namespace VkLiker.Service.Abstract
 {
     public interface ILikeService
     {
-        Task Start();
+        void Start();
     }
 }

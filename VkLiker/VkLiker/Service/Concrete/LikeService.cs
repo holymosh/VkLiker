@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using Database;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -24,13 +27,28 @@ namespace VkLiker.Service.Concrete
             _logger = logger;
         }
 
-        public async Task Start()
+        public void Start()
         {
             var tambov = _dbContext.RegionParts.Include(rp => rp.VkRegion).SingleOrDefault(p => p.Title == "Тамбов");
             if (tambov != null)
             {
-                var usersFromGlobalSearch = await _vkService.GetUsersFromGlobalSearch((int?)tambov.SourceId,17);
-                var arr = usersFromGlobalSearch.ToArray();
+                while (true)
+                {
+                    try
+                    {
+                        var tasks = new[]
+                        {
+                            LikeFromGlobalSearch(tambov),
+                            //UploadFriends(tambov),
+                            //LikePersonFromDb()
+                        };
+                        Task.WaitAll(tasks);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error(e, $"Exception : {e} \n Inner : {e.InnerException}");
+                    }
+                }
             }
 
         }

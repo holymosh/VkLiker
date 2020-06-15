@@ -31,7 +31,7 @@ namespace VkInteraction.Services.Concrete
                 ApplicationId = VkSettings.AppId,
                 Login = VkSettings.Login,
                 Password = VkSettings.Password,
-                Settings = Settings.All
+                Settings = Settings.All,
             };
             _vkApi.Authorize(authParams);
         }

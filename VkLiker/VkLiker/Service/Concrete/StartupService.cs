@@ -24,7 +24,7 @@ namespace VkLiker.Service.Concrete
 
         public async Task InitDb()
         {
-            await _dbContext.Database.EnsureDeletedAsync();
+            //await _dbContext.Database.EnsureDeletedAsync();
             await _dbContext.Database.EnsureCreatedAsync();
             var isInitialized = _dbContext.AppOptions.FirstOrDefault();
             VkRegion dbRegion = null;
@@ -69,9 +69,9 @@ namespace VkLiker.Service.Concrete
             }
         }
 
-        public async Task Start()
+        public void Start()
         {
-            await _likeService.Start();
+             _likeService.Start();
         }
     }
 }

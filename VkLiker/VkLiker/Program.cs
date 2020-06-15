@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Database;
 using Domain;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
+using Serilog.Core;
 using VkInteraction;
 using VkLiker.Service.Abstract;
 using VkLiker.Service.Concrete;
@@ -32,6 +34,13 @@ namespace VkLiker
     {
         public static void RegisterMainModule(this ServiceCollection serviceCollection)
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("logs\\myapp.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+            var logger = Log.Logger;
+            Log.Information("App initialization");
+            serviceCollection.AddSingleton(logger); // ILogger
             serviceCollection.AddSingleton<IStartupService, StartupService>();
             serviceCollection.AddSingleton<ILikeService, LikeService>();
         }

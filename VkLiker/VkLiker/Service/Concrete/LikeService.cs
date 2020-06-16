@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using Database;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -38,9 +35,9 @@ namespace VkLiker.Service.Concrete
                     {
                         var tasks = new[]
                         {
-                            //LikeFromGlobalSearch(tambov),
-                            //UploadFriends(tambov),
-                            LikePersonFromDb()
+                            LikeFromGlobalSearch(tambov),
+                            UploadFriends(tambov),
+                            LikePersonsFromDb()
                         };
                         Task.WaitAll(tasks);
                     }
@@ -148,24 +145,26 @@ namespace VkLiker.Service.Concrete
             }
         }
 
-        private async Task LikePersonFromDb()
+        private async Task LikePersonsFromDb()
         {
-            var currentUser = await _dbContext.Users.FirstOrDefaultAsync(u => !u.IsLiked);
-            if (currentUser != null)
+            var users = await _dbContext.Users.Where(u => !u.IsLiked).Take(30).ToArrayAsync();
+            if (users.Length > 0)
             {
                 try
                 {
-                    var userInfo = await _vkService.GetUser(currentUser.SourceId);
-                    await _vkService.SetLike(GetItemId(userInfo.PhotoId), currentUser.Id);
-                    currentUser.IsLiked = true;
-                    _dbContext.Users.Update(currentUser);
+                    foreach (var user in users)
+                    {
+                        var userInfo = await _vkService.GetUser(user.SourceId);
+                        await _vkService.SetLike(GetItemId(userInfo.PhotoId), userInfo.Id);
+                        user.IsLiked = true;
+                        _dbContext.Users.Update(user);
+                    }
                     await _dbContext.SaveChangesAsync();
                 }
                 catch (Exception e)
                 {
                     _logger.Error(e, $"Exception : {e} \n Inner : {e.InnerException}");
                 }
-
             }
         }
 

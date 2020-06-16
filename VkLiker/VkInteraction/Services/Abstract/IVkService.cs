@@ -13,5 +13,6 @@ namespace VkInteraction.Services.Abstract
         Task SetLike(long itemId, long ownerId);
         Task<User> GetUser(long id);
         Task<IReadOnlyCollection<User>> GetUsers(IEnumerable<long> ids);
+        Task<IReadOnlyCollection<User>> GetUserFriends(long userId, long offset);
     }
 }

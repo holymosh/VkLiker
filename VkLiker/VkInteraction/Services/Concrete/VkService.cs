@@ -18,6 +18,14 @@ namespace VkInteraction.Services.Concrete
     {
         private readonly IVkApi _vkApi;
 
+        private ApiAuthParams AuthParams = new ApiAuthParams()
+        {
+            ApplicationId = VkSettings.AppId,
+            Login = VkSettings.Login,
+            Password = VkSettings.Password,
+            Settings = Settings.All,
+        };
+
         public VkService(IVkApi vkApi)
         {
             _vkApi = vkApi;
@@ -26,14 +34,10 @@ namespace VkInteraction.Services.Concrete
 
         private void Authorize()
         {
-            var authParams = new ApiAuthParams()
-            {
-                ApplicationId = VkSettings.AppId,
-                Login = VkSettings.Login,
-                Password = VkSettings.Password,
-                Settings = Settings.All,
-            };
-            _vkApi.Authorize(authParams);
+            
+            _vkApi.AuthorizationFlow.SetAuthorizationParams(AuthParams);
+            //var res = _vkApi.AuthorizationFlow.AuthorizeAsync().GetAwaiter().GetResult();
+            _vkApi.Authorize(AuthParams);
         }
 
         public VkCollection<City> GetRegionPartsByString(string query)
@@ -90,8 +94,19 @@ namespace VkInteraction.Services.Concrete
 
         private async Task<IReadOnlyCollection<User>> RequestUsers(IEnumerable<long> ids)
         {
-
             return await _vkApi.Users.GetAsync(ids,ProfileFields.All);
         }
+
+        public async Task<IReadOnlyCollection<User>> GetUserFriends(long userId, long offset)
+        {
+            return await _vkApi.Friends.GetAsync(new FriendsGetParams
+            {
+                UserId = userId,
+                Fields = ProfileFields.All,
+                Offset = offset,
+                Count = 100
+            });
+        }
+
     }
 }

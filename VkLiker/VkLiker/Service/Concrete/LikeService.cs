@@ -38,9 +38,9 @@ namespace VkLiker.Service.Concrete
                     {
                         var tasks = new[]
                         {
-                            LikeFromGlobalSearch(tambov),
+                            //LikeFromGlobalSearch(tambov),
                             //UploadFriends(tambov),
-                            //LikePersonFromDb()
+                            LikePersonFromDb()
                         };
                         Task.WaitAll(tasks);
                     }
@@ -96,27 +96,49 @@ namespace VkLiker.Service.Concrete
 
         private async Task UploadFriends(RegionPart regionPart)
         {
-            var currentUser = await _dbContext.Users.FirstOrDefaultAsync(u => !u.IsFriendsUploaded);
+            var currentUser = await _dbContext.Users.Include(u => u.Friends).FirstOrDefaultAsync(u => !u.IsFriendsUploaded);
             if (currentUser != null)
             {
                 try
                 {
-                    var userInfo = await _vkService.GetUser(currentUser.SourceId);
-                    var friendIds = userInfo.FriendLists;
-                    var friends = await _vkService.GetUsers(friendIds);
-                    var newFriends = friends.Where(u => u.City.Region == regionPart.VkRegion.Title).Select(u =>
-                        new User
+                    var offset = 0;
+                    var getNext = true;
+                    var cities = TambovCities.ResourceManager.GetString("tambov").Split(',');
+                    while (getNext)
+                    {
+                        var friends = await _vkService.GetUserFriends(currentUser.SourceId, offset);
+                        if (friends.Count > 0)
                         {
-                            FirstName = u.FirstName,
-                            LastName = u.LastName,
-                            RegionPart = regionPart,
-                            SourceId = u.Id,
-                            IsFriendsUploaded = false,
-                            IsLiked = false
-                        });
-                    await _dbContext.AddRangeAsync(newFriends);
-                    foreach (var friend in newFriends) currentUser.Friends.Add(friend);
-                    _dbContext.Users.Update(currentUser);
+                            var filteredFriends = friends.Where(u => u.City != null).Where(u => cities.Contains(u.City.Title) || u.City?.Region != null &&
+                                                                u.City.Region == regionPart.VkRegion.Title).Select(u =>
+                                new User
+                                {
+                                    FirstName = u.FirstName,
+                                    LastName = u.LastName,
+                                    RegionPart = regionPart,
+                                    SourceId = u.Id,
+                                    IsFriendsUploaded = false,
+                                    IsLiked = false
+                                }).ToArray();
+                            if (filteredFriends.Length > 0)
+                            {
+                                await _dbContext.AddRangeAsync(filteredFriends);
+                                foreach (var friend in filteredFriends) currentUser.Friends.Add(friend);
+                                _dbContext.Users.Update(currentUser);
+                                await _dbContext.SaveChangesAsync();
+                            }
+                        }
+                        else
+                        {
+                            getNext = false;
+                        }
+
+                        offset += 100;
+
+                    }
+
+                    currentUser.IsFriendsUploaded = true;
+                    _dbContext.Update(currentUser);
                     await _dbContext.SaveChangesAsync();
                 }
                 catch (Exception e)
